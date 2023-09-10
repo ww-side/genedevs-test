@@ -1,15 +1,26 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 require('dotenv').config({ path: '.env' });
 const authRouter = require('./routers/authRouter');
+const usersRouter = require('./routers/usersRouter');
 const testsRouter = require('./routers/testsRouter');
 const PORT = process.env.PORT || 8080;
 
 const app = express();
 
+app.use(
+  cors({
+    origin: ['http://localhost:5173'],
+    methods: ['GET', 'POST', 'DELETE'],
+    credentials: true,
+  }),
+);
+
 app.use(express.json());
 app.use('/auth', authRouter);
 app.use('/tests', testsRouter);
+app.use('/users', usersRouter);
 
 const connectToDatabase = async () => {
   try {
